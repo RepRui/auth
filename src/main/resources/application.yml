@@ -1,0 +1,71 @@
+logging:
+  config: classpath:logback.xml
+server:
+  port: 80
+spring:
+  application:
+    name: auth
+    #db config
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/auth?useUnicode=true&useSSL=false&characterEncoding=utf8
+  data:
+    redis:
+      port: 35379
+      host: 127.0.0.1
+      password: Li@auth.com
+      database: 1
+
+mybatis-plus:
+  configuration:
+    # MyBatis 配置
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #需要maven引入log4j.jar
+    #log-impl: org.apache.ibatis.logging.log4j.Log4jImpl
+  global-config:
+    # 全局配置
+    db-config:
+      # 数据库配置
+      id-type: auto
+  mapper-locations: classpath:/mapper/**.xml
+
+
+# Knife4j配置
+# springdoc-openapi配置
+springdoc:
+  # get请求多参数时不需要添加额外的@ParameterObject和@Parameter注解
+  default-flat-param-object: true
+  # 启用swaggerUI
+  swagger-ui:
+    #自定义swagger前端请求路径，输入http：127.0.0.1:80/swagger-ui.html会自动重定向到swagger页面
+    path: /swagger-ui.html
+    enabled: true
+    #    tags-sorter: alpha # 标签的排序方式 alpha:按照子母顺序排序（@ApiSupport注解排序不生效，因此需要设置）
+    #    operations-sorter: alpha # 接口的排序方式 alpha:按照子母顺序排序（@ApiOperationSupport注解排序生效，因此这里不作设置）
+    operations-sorter: order # 设置规则为order，该规则会使用Knife4j的增强排序扩展规则`x-order`
+  # 启用文档，默认开启
+  api-docs:
+    path: /v3/api-docs    #swagger后端请求地址
+    enabled: true
+    #使用java配置分组不使用yml配置
+ # group-configs:
+ #   - group: 'auth'   #分组名称
+ #     paths-to-match: '/**'   #配置需要匹配的路径,默认为/**
+  #    packages-to-scan: com.li.auth    #配置要扫描包的路径,一般配置到启动类所在的包名
+
+# knife4j相关配置 可以不用改
+knife4j:
+  enable: true    #开启knife4j，无需添加@EnableKnife4j注解
+  setting:
+    language: ZH_CN   # 中文:ZH_CN 英文:EN
+    enable-swagger-models: true
+    enable-dynamic-parameter: false
+    footer-custom-content: "<strong>Copyright ©️ 2024 Li_Shi_Hai. All Rights Reversed</strong>"
+    enable-footer-custom: true
+    enable-footer: true
+    enable-document-manage: true
