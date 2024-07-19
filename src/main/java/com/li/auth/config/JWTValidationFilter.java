@@ -33,7 +33,7 @@ public class JWTValidationFilter extends OncePerRequestFilter {
     @Resource
     @Qualifier("handlerExceptionResolver")
     private HandlerExceptionResolver resolver;
-
+    /*如果你想要保持父类约定，可以这样标记@NonNull*/
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (AccessInfo.isMatch(request.getRequestURI())){

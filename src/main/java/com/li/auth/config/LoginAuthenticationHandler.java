@@ -24,7 +24,7 @@ public class LoginAuthenticationHandler implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setContentType("application/json;charset=UTF-8");
         ServletOutputStream out = response.getOutputStream();
-        out.write(JSONObject.toJSONString(Result.getInstance(false,403,"匿名用户没有权限进行访问",null)).getBytes(StandardCharsets.UTF_8));
+        out.write(JSONObject.toJSONString(Result.getInstance(false,401,"匿名用户没有权限进行访问",null)).getBytes(StandardCharsets.UTF_8));
         out.flush();
         out.close();
     }
