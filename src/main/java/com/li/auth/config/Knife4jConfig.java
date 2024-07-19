@@ -29,9 +29,9 @@ public class Knife4jConfig {
                         .description("授权中心服务...") // 描述Api接口文档的基本信息
                         .version("v1.0.0") // 版本
                         // 设置OpenAPI文档的联系信息，包括联系人姓名为"patrick"，邮箱为"patrick@gmail.com"。
-                        .contact(new Contact().name("云南达速科技有限公司").email("dsitl@dsitl.com"))
+                        .contact(new Contact().name("授权中心").email("shihai@li.com"))
                         // 设置OpenAPI文档的许可证信息，包括许可证名称为"Apache 2.0"，许可证URL为"http://springdoc.org"。
-                        .license(new License().name("云南达速科技有限公司").url("http://dsitl.com/"))
+                        .license(new License().name("授权中心").url("http://li.shihai.com/"))
                 );
     }
 
