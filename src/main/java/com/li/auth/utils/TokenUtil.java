@@ -8,14 +8,13 @@ import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecureDigestAlgorithm;
-import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.StringUtils;
-
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.SecureRandom;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 import java.util.UUID;
@@ -30,7 +29,7 @@ public class TokenUtil {
     /**
      * 过期时间(单位:毫秒)
      */
-    public static long ACCESS_EXPIRE_TIME = 5 * 60 * 1000L;//5分鐘的毫秒數
+    public static long ACCESS_EXPIRE_TIME = 10 * 60 * 1000L;//5分鐘的毫秒數
 
 
     /**
@@ -74,7 +73,10 @@ public class TokenUtil {
     public static String genAccessToken(String username) {
         // 令牌id
         String uuid = UUID.randomUUID().toString();
-        Date exprireDate = Date.from(Instant.now().plusMillis(ACCESS_EXPIRE_TIME));
+        //Date exprireDate = Date.from(Instant.now().plusMillis(ACCESS_EXPIRE_TIME));
+        LocalDate date2999 = LocalDate.of(2999, 12, 31);
+        // 转换为java.util.Date
+        Date exprireDate = Date.from(date2999.atStartOfDay(ZoneId.systemDefault()).toInstant());//设置超长有效期，让redis接管有效期
 
 
         return Jwts.builder()

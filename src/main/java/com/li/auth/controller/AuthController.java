@@ -1,5 +1,6 @@
 package com.li.auth.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.li.auth.dto.LoginUser;
 import com.li.auth.dto.Result;
 import com.li.auth.pojo.SysUser;
@@ -29,9 +30,19 @@ public class AuthController {
     @PostMapping(value = {"/login"},consumes = "application/json;charset=UTF-8",produces = "application/json;charset=UTF-8")//consumes参数设置了接受的Content-Type，produces参数设置了返回的Content-Type。
     public Result login(HttpServletRequest request,@RequestBody @Valid LoginUser loginUser){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
-       // SysUser user = (SysUser) authentication.getPrincipal();
         String token = TokenUtil.genAccessToken(loginUser.getUsername());
         redisUtil.put(request.getRemoteAddr(),token);
+       /*SysUser user = (SysUser) authentication.getPrincipal();
+        if(redisUtil.get(request.getRemoteAddr())!=null){
+            SysUser u = JSONObject.parseObject(redisUtil.get(request.getRemoteAddr()),SysUser.class);
+            if(u.getUsername().equals(loginUser.getUsername())){
+                return Result.getInstance(false,200,"已经在其处登录",token);
+            }else {
+                return Result.getInstance(false,200,"有其他用户登录请先注销该用户",token);
+            }
+        }
+        redisUtil.put(request.getRemoteAddr(), JSONObject.toJSONString(user));
+        redisUtil.put(user.getUsername(),token );*/
         return Result.getInstance(true,200,"登录成功",token);
     }
 
