@@ -1,5 +1,5 @@
-maven项目
+learning maven project
 
-学习使用StringBoot+String Security+Swagger4+JJWT框架
+learning StringBoot+String Security+Swagger4+JJWT+Redis
 
-JUST STUDY
+enjoy
