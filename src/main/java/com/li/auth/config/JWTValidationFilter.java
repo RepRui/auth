@@ -42,13 +42,18 @@ public class JWTValidationFilter extends OncePerRequestFilter {
             // 是白名单请求放行
             filterChain.doFilter(request, response);
         }else {
-            String token = ToolsUtil.getLoginToken(request);
+            /*String token = ToolsUtil.getLoginToken(request);
             String session = redisUtil.get(request.getRemoteAddr());
             if(session == null || token == null ){
                 resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN无效"));
                 return;
             }
             if(!session.equals(token)){
+                resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN无效"));
+                return;
+            }*/
+            String token = ToolsUtil.getLoginToken(request);
+            if( token == null || redisUtil.get(token) == null ){
                 resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN无效"));
                 return;
             }
@@ -75,7 +80,7 @@ public class JWTValidationFilter extends OncePerRequestFilter {
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 //设置到spring security上下文
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                redisUtil.expire(request.getRequestURI());
+                redisUtil.expire(token);
                 filterChain.doFilter(request, response);
             }catch (Exception ex){
                 resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN验证失败"));
