@@ -31,7 +31,9 @@ public class AuthController {
     public Result login(HttpServletRequest request,@RequestBody @Valid LoginUser loginUser){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
         String token = TokenUtil.genAccessToken(loginUser.getUsername());
-        redisUtil.put(request.getRemoteAddr(),token);
+        //redisUtil.put(request.getRemoteAddr(),token);
+        SysUser user = (SysUser) authentication.getPrincipal();
+        redisUtil.put(token,JSONObject.toJSONString(user));
        /*SysUser user = (SysUser) authentication.getPrincipal();
         if(redisUtil.get(request.getRemoteAddr())!=null){
             SysUser u = JSONObject.parseObject(redisUtil.get(request.getRemoteAddr()),SysUser.class);

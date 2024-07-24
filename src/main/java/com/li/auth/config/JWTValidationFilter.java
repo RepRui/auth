@@ -1,6 +1,8 @@
 package com.li.auth.config;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.li.auth.basic.AccessInfo;
+import com.li.auth.pojo.SysUser;
 import com.li.auth.utils.RedisUtil;
 import com.li.auth.utils.TokenUtil;
 import com.li.auth.utils.ToolsUtil;
@@ -28,8 +30,8 @@ public class JWTValidationFilter extends OncePerRequestFilter {
 
     @Resource
     private RedisUtil redisUtil;
-    @Resource
-    private CustomerUserDetailsService customerUserDetailsService;
+   /* @Resource
+    private CustomerUserDetailsService customerUserDetailsService;*/
     @Resource
     @Qualifier("handlerExceptionResolver")
     private HandlerExceptionResolver resolver;
@@ -61,17 +63,24 @@ public class JWTValidationFilter extends OncePerRequestFilter {
                 return;
             }
             //获取用户信息
-            UserDetails user = customerUserDetailsService.loadUserByUsername(username);
-            if(user == null){
+            //UserDetails user = customerUserDetailsService.loadUserByUsername(username);
+            String u = redisUtil.get(token);
+            if(u == null){
                 resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN无效"));
                 return;
             }
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            //设置到spring security上下文
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            redisUtil.expire(request.getRequestURI());
-            filterChain.doFilter(request, response);
+            try{
+                UserDetails user =  JSONObject.parseObject(redisUtil.get(request.getRemoteAddr()), SysUser.class);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                //设置到spring security上下文
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                redisUtil.expire(request.getRequestURI());
+                filterChain.doFilter(request, response);
+            }catch (Exception ex){
+                resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN验证失败"));
+            }
+
         }
     }
 }
