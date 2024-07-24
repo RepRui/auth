@@ -75,7 +75,7 @@ public class JWTValidationFilter extends OncePerRequestFilter {
                 return;
             }
             try{
-                UserDetails user =  JSONObject.parseObject(redisUtil.get(request.getRemoteAddr()), SysUser.class);
+                UserDetails user =  JSONObject.parseObject(u, SysUser.class);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 //设置到spring security上下文
@@ -83,7 +83,7 @@ public class JWTValidationFilter extends OncePerRequestFilter {
                 redisUtil.expire(token);
                 filterChain.doFilter(request, response);
             }catch (Exception ex){
-                resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN验证失败"));
+                resolver.resolveException(request,response,null,ex);
             }
 
         }
