@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,6 +25,7 @@ public class GlobalExceptionHandler {
     private static final  String INTERNAL_SERVER_ERROR_MSG = "服务器内部错误";
     private static final  String NOT_FOUND_MSG = "请求地址错误";
     private static final  String UNAUTHORIZED_MSG = "用户验证失败";
+    private static final  String FORBIDDEN_MSG = "用户权限不足";
 
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -103,7 +105,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 用户登录错误归->类服务器内部错误
+     * 用户登录错误归
      * @param ex
      * @return
      */
@@ -114,6 +116,16 @@ public class GlobalExceptionHandler {
     }
 
 
+    /**
+     * 用户权限错误归
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<Result> handleException(AccessDeniedException ex) {
+        ToolsUtil.writeLogs(INTERNAL_SERVER_ERROR_MSG,logger,ex);
+        return new ResponseEntity<>(Result.getInstance(false,403,FORBIDDEN_MSG,ex.getMessage()), HttpStatus.FORBIDDEN);
+    }
 
 
 
