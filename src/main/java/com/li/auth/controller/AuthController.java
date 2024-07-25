@@ -48,7 +48,7 @@ public class AuthController {
         return Result.getInstance(true,200,"登录成功",token);
     }
 
-    @Operation(summary = "用户登录")
+    @Operation(summary = "用户注销")
     @PostMapping(value = {"/logout"})
     public Result logout(HttpServletRequest request){
         //String token = ToolsUtil.getLoginToken(request);
