@@ -6,7 +6,7 @@ import org.springframework.util.AntPathMatcher;
 public class AccessInfo {
     private static final  AntPathMatcher matcher = new AntPathMatcher();
     public static final String[] WHITE_URI = {
-        "/","/index","/login","/doc.html","/favicon.ico", "/webjars/**","/swagger-ui**","/swagger-ui/**", "/v3/**"
+        "/","/index","/login","/logout","/doc.html","/favicon.ico", "/webjars/**","/swagger-ui**","/swagger-ui/**", "/v3/**"
     };
 
 

@@ -53,8 +53,12 @@ public class JWTValidationFilter extends OncePerRequestFilter {
                 return;
             }*/
             String token = ToolsUtil.getLoginToken(request);
+            if( token == null  ){
+                resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN无效"));
+                return;
+            }
             String u = redisUtil.get(token);
-            if( token == null || u == null ){
+            if(  u == null ){
                 resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN无效"));
                 return;
             }
