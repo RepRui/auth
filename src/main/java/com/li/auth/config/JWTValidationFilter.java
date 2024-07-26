@@ -53,7 +53,8 @@ public class JWTValidationFilter extends OncePerRequestFilter {
                 return;
             }*/
             String token = ToolsUtil.getLoginToken(request);
-            if( token == null || redisUtil.get(token) == null ){
+            String u = redisUtil.get(token);
+            if( token == null || u == null ){
                 resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN无效"));
                 return;
             }
@@ -69,11 +70,6 @@ public class JWTValidationFilter extends OncePerRequestFilter {
             }
             //获取用户信息
             //UserDetails user = customerUserDetailsService.loadUserByUsername(username);
-            String u = redisUtil.get(token);
-            if(u == null){
-                resolver.resolveException(request,response,null,new InsufficientAuthenticationException("TOKEN无效"));
-                return;
-            }
             try{
                 UserDetails user =  JSONObject.parseObject(u, SysUser.class);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user,null,user.getAuthorities());
