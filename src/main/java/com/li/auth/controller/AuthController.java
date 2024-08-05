@@ -51,8 +51,9 @@ public class AuthController {
     @Operation(summary = "用户注销")
     @PostMapping(value = {"/logout"})
     public Result logout(HttpServletRequest request){
-        //String token = ToolsUtil.getLoginToken(request);
-        if(redisUtil.delete(request.getRemoteAddr())){
+        String token = ToolsUtil.getLoginToken(request);
+        if(redisUtil.delete(token)){
+            SecurityContextHolder.clearContext();
             return Result.getInstance(true,200,"注销成功",null);
         }else {
             return Result.getInstance(false,200,"注销失败",null);
