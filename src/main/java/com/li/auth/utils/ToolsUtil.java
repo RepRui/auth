@@ -89,7 +89,7 @@ public class ToolsUtil {
         return data.toString();
     }
     /**
-     * 获取POST请求的参数
+     * 获取GET请求的参数
      * @param request
      * @return
      */
