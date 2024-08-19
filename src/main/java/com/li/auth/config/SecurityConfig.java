@@ -50,6 +50,10 @@ public class SecurityConfig {
         DaoAuthenticationProvider authenticationProvider = daoAuthenticationProvider();
         return new ProviderManager(authenticationProvider);
     }
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
 
     /**
@@ -57,12 +61,12 @@ public class SecurityConfig {
      * @return DaoAuthenticationProvider
      */
    // @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
+    public DaoAuthenticationProvider daoAuthenticationProvider(PasswordEncoder passwordEncoder) {
         final DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(customerUserDetailsService);
         //注释使用security默认密码验证器 provider.setUserDetailsPasswordService(customerUserDetailsService);//customerUserDetailsService需要实现接口UserDetailsPasswordService
         provider.setHideUserNotFoundExceptions(false);
-        provider.setPasswordEncoder(passwordEncoder());//使用BCrypt加密
+        provider.setPasswordEncoder(passwordEncoder);//使用BCrypt加密
         return provider;
     }
 
@@ -115,10 +119,6 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
-    }
-
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
     }
 
 }
