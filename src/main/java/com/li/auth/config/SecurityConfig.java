@@ -42,14 +42,7 @@ public class SecurityConfig {
     private LoginAuthenticationHandler loginAuthenticationHandler;
 
 
-    /**
-     * 获取AuthenticationManager（认证管理器），登录时认证使用
-     */
-    @Bean
-    public AuthenticationManager authenticationManager() {
-        DaoAuthenticationProvider authenticationProvider = daoAuthenticationProvider();
-        return new ProviderManager(authenticationProvider);
-    }
+    
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -60,7 +53,7 @@ public class SecurityConfig {
      * 允许抛出用户不存在的异常
      * @return DaoAuthenticationProvider
      */
-   // @Bean
+    @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(PasswordEncoder passwordEncoder) {
         final DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(customerUserDetailsService);
@@ -70,6 +63,14 @@ public class SecurityConfig {
         return provider;
     }
 
+    /**
+     * 获取AuthenticationManager（认证管理器），登录时认证使用
+     */
+    @Bean
+    public AuthenticationManager authenticationManager(DaoAuthenticationProvider daoAuthenticationProvider) {
+        return new ProviderManager(authenticationProvider);
+    }
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
