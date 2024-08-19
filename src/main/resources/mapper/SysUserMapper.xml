@@ -12,7 +12,6 @@
         <result column="expired" property="accountNonExpired" jdbcType="BOOLEAN"/>
         <result column="lock" property="accountNonLocked" jdbcType="BOOLEAN"/>
         <result column="credentials" property="credentialsNonExpired" jdbcType="BOOLEAN"/>
-        <result column="credentials" property="enabled" jdbcType="BOOLEAN"/>
         <result column="create_user" property="createUser" jdbcType="VARCHAR"/>
         <result column="update_user" property="updateUser" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
