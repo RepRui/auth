@@ -12,7 +12,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "用户中心",description = "用户管理")
@@ -22,6 +22,8 @@ public class SysUserController {
 
     @Resource
     private SysUserService sysUserService;
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAuthority('auth:user:add')")
     @Operation(summary = "用户信息注册")
@@ -35,8 +37,7 @@ public class SysUserController {
             result.setMsg("用户已存在");
             return result;
         }
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        sysUser.setPassword(bCryptPasswordEncoder.encode(sysUser.getPassword()));//密码加密
+        sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));//密码加密
         String token = ToolsUtil.getLoginToken(request);
         String username = TokenUtil.getUserFromToken(token);
         sysUser.setCreateUser(username);
