@@ -68,7 +68,7 @@ public class SecurityConfig {
      */
     @Bean
     public AuthenticationManager authenticationManager(DaoAuthenticationProvider daoAuthenticationProvider) {
-        return new ProviderManager(authenticationProvider);
+        return new ProviderManager(daoAuthenticationProvider);
     }
     
     @Bean
