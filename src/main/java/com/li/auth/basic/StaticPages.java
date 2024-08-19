@@ -66,7 +66,7 @@ public class StaticPages {
             "    <div class=\"main\">\n" +
             "        <ul>\n" +
             "            <li class=\"active\"><a href=\"/\">首页</a></li>\n" +
-            "            <li><a href=\"/doc.html\" target=\"_blank\"><span style=\"color: crimson;\">API</span>接口文档</a></li>\n" +
+            "            <li><a href=\"/doc.html\" target=\"_self\"><span style=\"color: crimson;\">API</span>接口文档</a></li>\n" +
             "        </ul>\n" +
             "    </div>\n" +
             "    <div class=\"title\">\n" +
